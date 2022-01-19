@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      - name: Chmod
+        run: chmod 0755 ./redpill_tool_chain.sh
+
+      - name: Build docker image
+        run: ./redpill_tool_chain.sh build apollolake-7.0.1-42218
+
+      - name: Create dsm image
+        run: ./redpill_tool_chain.sh auto apollolake-7.0.1-42218
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dsm918
+          path: ./images
